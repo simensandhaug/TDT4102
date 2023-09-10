@@ -112,6 +112,7 @@ void printMenu() {
     "8) printHumanReadableTime \n" <<
     "9) printMultiplicationTable \n" <<
     "10) pythagoras \n" <<
+    "11) printBalance \n" <<
     "Angi valg (0-5)" <<
     endl;
 }
@@ -176,17 +177,61 @@ void solveQuadraticEquation() {
 
 void pythagoras() {
     AnimationWindow win{100, 100, 500, 500, "Pythagoras"};
+    Point p1{200, 200};
+    Point p2{200, 300};
+    Point p3{300, 300};
+
+    win.draw_triangle(p1, p2, p3, Color::red);
+
+    win.draw_quad(p1, Point{p1.x - 100, p1.y}, Point{p2.x - 100, p2.y}, p2, Color::blue);
+    win.draw_quad(p2, Point{p2.x, p2.y + 100}, Point{p3.x, p3.y + 100}, p3, Color::green);
+    win.draw_quad(p3, Point{p3.x + 100, p3.y - 100}, Point{p1.x + 100, p1.y - 100}, p1, Color::sky_blue);
     win.wait_for_close();
 
-    Point p1{250, 250};
-    Point p2{300, 250};
-    Point p3{275, 300};
-
-    win.draw_triangle(p1, p2, p3);
 }
 
 // ---------------------------------- /4 --------------------------------------
+
+// ---------------------------------- 5 --------------------------------------
+
+// a)
+
+vector<int> calculateBalance(int bal, int rate, int years) {
+    vector<int> balances;
+    balances.push_back(bal);
+    for(int i = 1; i < years; i++) {
+        long prev = balances[i-1];
+        float balance = prev + prev * static_cast<double>(rate) / 100;
+        balances.push_back(balance);
+    }
+    return balances;
+}
+
+// b)
+
+void printBalance(vector<int> balances) {
+    long len = balances.size();
+    std::cout << "År " << setw(10) << "Saldo" << endl;
+    for(int i = 0; i < len; i++) {
+        std::cout << i << setw(12) << balances[i] << endl;
+    }
+}
+
+// c)
+// Feilmeldingen indikerer at operatoren "<<" ikke kan brukes for å skrive ut innholdet i en vector av heltall, siden operatorene ikke er definert for denne typen data. En mulig forklaring på dette er at standardbiblioteket for C++ ikke inneholder en innebygd implementasjon av operatoren "<<" for å skrive ut innholdet i en vector. 
+// ---------------------------------- /5 --------------------------------------
+
 int main() {
+
+    // 5d)
+    vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    //for (int i = 0; i <= v.size(); i++) {
+    for(int i = 0; i < v.size(); ++i) {
+        cout << v.at(i) << endl;
+    }
+    //Vi får Source location: unknown men vi skriver ut alle tallene fra 1 til 9
+    //Dette skyldes at vi går ett steg for langt i løkken, fordi det står <= size() i stedet for < size()
+    //Altså får vi en Index Out Of Range feilmelding fordi vi prøver å aksessere på plass 10 i vektoren, som ikke finnes
     
     bool active = true;
 
@@ -234,6 +279,9 @@ int main() {
                 break;
             case 10:
                 pythagoras();
+                break;
+            case 11:
+                printBalance(calculateBalance(5000, 3, 10));
                 break;
         }
     }
